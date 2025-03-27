@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Scores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 15px;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        input[type="text"] {
+            width: 70%;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Quiz Scores</h2>
+
+        <!-- Search Form -->
+        <form method="GET" action="{{ url_for('scores') }}">
+            <input type="text" name="search" placeholder="Search by Name, Date, or Score" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>No. of Questions</th>
+                    <th>Date</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td>{{ score.quiz_id }}</td>
+                    <td>{{ score.quiz.name }}</td>
+                    <td>{{ score.quiz.questions|length if score.quiz else 'N/A' }}</td>
+                    <td>{{ score.time_stamp_of_attempt.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ score.total_scored }}/{{ score.quiz.questions|length if score.quiz else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

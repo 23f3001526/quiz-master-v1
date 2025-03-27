@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Subject Creation</title>
+        <link rel="stylesheet" href="static/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <style>
+            body {
+            background-color: #f0f7ff; 
+            color: #333333; 
+            font-family: Arial, sans-serif;
+        }
+        </style>
+    </head>
+    <body>
+                <div id="campaign-form-body">
+                    <h3>New Subject Creation</h3>
+                    <p></p>
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                    </div>
+                    {% endif %}
+                    <form action="/create_subject" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Subject Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="enter subject name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descrip" class="form-label"></label>Subject Description</label>
+                            <input type="text" class="form-control" id="descrip" placeholder="enter description" name="desc">
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <input type="submit" class="btn btn-primary" value="Create">
+                        </div>
+                    </form>
+                        <a href="/"><h5 style="text-align: center;">Go to Campaigns Page</h5></a>
+                </div>
+                <br>
+    </body>
+</html>

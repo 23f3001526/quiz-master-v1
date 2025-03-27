@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 0; }
+        .navbar { background-color: #87CEEB; padding: 10px; }
+        .navbar a { margin: 0 10px; text-decoration: none; color: green; font-weight: bold; }
+        .container { margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; text-decoration: none; border-radius: 5px; }
+        .btn-view { background-color: lightblue; color: black; }
+        .btn-start { background-color: lightgreen; color: black; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#">Home</a> | 
+        <a href="{{ url_for('scores') }}">Scores</a> | 
+        <a href="{{ url_for('user_stats',user_id=current_user.id)}}">Summary</a> | 
+        <a href="{{ url_for('student_logout') }}">Logout</a>
+        <span style="float: right;">Welcome, {{ user.username }}</span>
+    </div>
+
+    <div class="container">
+        <h2>User Dashboard</h2>
+        <!-- Search Form -->
+        <form method="GET" action="{{ url_for('user_dashboard') }}">
+            <input type="text" name="search" placeholder="Search Quiz, Subject, or Chapter" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <h3>Upcoming Quizzes</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Quiz Name</th>
+                <th>No. of Questions</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            {% for quiz in quizzes %}
+            <tr>
+                <td>{{ quiz.id }}</td>
+                <td>{{ quiz.name if quiz.name else "Unnamed Quiz" }}</td>
+                <td>{{ quiz.num_questions }}</td>
+                <td>{{ quiz.date }}</td>
+                <td>
+                    <a href="#" class="btn btn-view">View</a>
+                    <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-start">Start</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

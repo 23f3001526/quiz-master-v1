@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Quizzes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-4">
+        <!-- Page Header -->
+        <h2 class="text-center fw-bold">Quizzes for {{ chapter.name }}</h2>
+
+        <!-- Back to Chapters -->
+        <a href="{{ url_for('view_chapters', subject_id=chapter.subject_id) }}" class="btn btn-secondary my-3">
+            ← Back to Chapters
+        </a>
+
+        <!-- Add Quiz Form -->
+        <div class="card p-3 shadow-sm">
+            <h4 class="fw-bold">Add a New Quiz</h4>
+            <form action="{{ url_for('add_quiz', chapter_id=chapter.id) }}" method="post">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <label class="form-label">Quiz Name:</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Remarks:</label>
+                        <input type="text" class="form-control" name="remarks" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date:</label>
+                        <input type="date" class="form-control" name="start_date" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End Date:</label>
+                        <input type="date" class="form-control" name="end_date" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 mt-4">Add Quiz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- List of Quizzes -->
+        <div class="mt-4">
+            <h4 class="fw-bold">Existing Quizzes</h4>
+            <form method="POST" action="{{ url_for('search_quizzes', chapter_id=chapter.id) }}" class="d-flex mb-3">
+                <input type="text" name="search_query" class="form-control me-2" placeholder="Search quizzes..." 
+                    value="{{ search_query if search_query else '' }}" required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <table class="table table-bordered table-hover bg-white shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Remarks</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.id }}</td>
+                        <td>{{ quiz.name }}</td>
+                        <td>{{ quiz.remarks }}</td>
+                        <td>{{ quiz.start_date }}</td>
+                        <td>{{ quiz.end_date }}</td>
+                        <td class="fw-bold {% if quiz.is_active %}text-success{% else %}text-danger{% endif %}">
+                            {% if quiz.is_active %}
+                                Active
+                            {% else %}
+                                Inactive
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Update Quiz Form -->
+                            <form action="{{ url_for('update_quiz', quiz_id=quiz.id) }}" method="post" class="d-inline">
+                                <input type="text" name="remarks" placeholder="New Remarks" class="form-control d-inline w-auto">
+                                <input type="date" name="start_date" class="form-control d-inline w-auto">
+                                <input type="date" name="end_date" class="form-control d-inline w-auto">
+                                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                            </form>
+
+                            <!-- Delete Quiz -->
+                            <form action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+
+                            <!-- Manage Questions -->
+                            <a href="{{ url_for('view_questions', quiz_id=quiz.id) }}" class="btn btn-info btn-sm">Manage Questions</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

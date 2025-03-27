@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Questions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Quiz App</a>
+            <a class="btn btn-outline-light" href="#">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4 text-center">Manage Questions for <strong>{{ quiz.remarks }}</strong></h2>
+
+        <!-- Add Question Form -->
+        <div class="card p-4 mb-4">
+            <h4 class="mb-3">Add a New Question</h4>
+            <form action="{{ url_for('add_question', quiz_id=quiz.id) }}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="question_statement" placeholder="Enter question text" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="option_a" placeholder="Option A" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="option_b" placeholder="Option B" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="option_c" placeholder="Option C" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="option_d" placeholder="Option D" required>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="correct_option" placeholder="Correct Option (A/B/C/D)" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Add Question</button>
+            </form>
+        </div>
+
+        <!-- List Questions -->
+        <div class="card p-4">
+            <h4 class="mb-3">Existing Questions</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Option A</th>
+                        <th>Option B</th>
+                        <th>Option C</th>
+                        <th>Option D</th>
+                        <th>Correct Answer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for question in questions %}
+                    <tr>
+                        <td>{{ question.question_statement }}</td>
+                        <td>{{ question.option1}}</td>
+                        <td>{{ question.option2 }}</td>
+                        <td>{{ question.option3 }}</td>
+                        <td>{{ question.option4 }}</td>
+                        <td><strong>{{ question.correct_option }}</strong></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning" onclick="toggleEditForm('{{ question.id }}')">Edit</a>
+                            <form action="{{ url_for('delete_question', question_id=question.id) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr id="edit-form-{{ question.id }}" style="display:none;">
+                        <td colspan="7">
+                            <form action="{{ url_for('update_question', question_id=question.id) }}" method="post" class="row g-3">
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="question_statement" value="{{ question.question_statement }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="option_a" value="{{ question.option1 }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="option_b" value="{{ question.option2 }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="option_c" value="{{ question.option3 }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="option_d" value="{{ question.option4 }}" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="correct_option" value="{{ question.correct_option }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-success mt-2">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('view_quizzes', chapter_id=quiz.chapter_id) }}" class="btn btn-secondary">Back to Quizzes</a>
+        </div>
+    </div>
+
+    <!-- Toggle Edit Form Script -->
+    <script>
+    function toggleEditForm(questionId) {
+        var form = document.getElementById("edit-form-" + questionId);
+        if (form.style.display === "none") {
+            form.style.display = "table-row";
+        } else {
+            form.style.display = "none";
+        }
+    }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Stats</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+        img { width: 100%; max-width: 500px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User's Quiz Stats</h1>
+
+        <h3>📊 Quiz Participation</h3>
+        <img src="{{ url_for('static', filename='bar_chart_path.png') }}" alt="Quiz Participation Chart">
+
+    </div>
+</body>
+</html>
